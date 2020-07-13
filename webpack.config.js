@@ -9,9 +9,12 @@ module.exports = (env, argv) => {
         return argv.mode ==='development';
     }
     var config = {
-        entry: './src/editor.js',
+        entry: {
+            editor: './src/editor.js',
+            script: './src/script.js'
+        },
         output: {
-            filename: 'editor.js'
+            filename: '[name].js'
         },
         optimization: {
             minimizer: [
@@ -31,10 +34,13 @@ module.exports = (env, argv) => {
         plugins: [
             new CleanWebpackPlugin(),
             new MiniCSSExtractPlugin({
-                filename: "editor.css"
+                chunkFilename: "[id].css",
+                moduleFilename: chunk => {
+                    return chunk.name === 'script' ? 'style.css' : '[name].css'
+                }
             })
         ],
-        devtool: isDevelopment() ? 'cheap-module-eval-source-map' : 'source-map',
+        devtool: isDevelopment() ? 'cheap-module-source-map' : 'source-map',
         module: {
             rules: [
                 {
@@ -77,6 +83,11 @@ module.exports = (env, argv) => {
                       ],
                 }
             ]
+        },
+        externals: {
+            jquery: "jQuery",
+            "@wordpress/blocks": ["wp", "blocks"],
+            "@wordpress/i18n": ["wp", "i18n"],
         }
     };
 

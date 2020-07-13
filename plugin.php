@@ -20,7 +20,9 @@ function tpwb_blocks_register_block_type($block, $options = array()) {
         array_merge(
             array(
                 'editor_script' => 'tpwb-blocks-editor',
-                'editor_style' => 'tpwb-blocks-editor',
+                'editor_style'  => 'tpwb-blocks-editor',
+                'script'        => 'tpwb-blocks',
+                'style'         => 'tpwb-blocks',
             ),
             $options
         )
@@ -31,13 +33,21 @@ function tpwb_blocks_register() {
     wp_register_script(
         'tpwb-blocks-editor',
         plugins_url('dist/editor.js', __FILE__), 
-        array('wp-blocks', 'wp-i18n', 'wp-element'), 
-        true
+        array('wp-blocks', 'wp-i18n', 'wp-element')
+    );
+    wp_register_script(
+        'tpwb-blocks',
+        plugins_url('dist/script.js', __FILE__), 
+        array('jquery')
     );
     wp_register_style(
         'tpwb-blocks-editor', 
         plugins_url('dist/editor.css', __FILE__),
         array('wp-edit-blocks')
+    );
+    wp_register_style(
+        'tpwb-blocks', 
+        plugins_url('dist/style.css', __FILE__)
     );
 
     tpwb_blocks_register_block_type('firstblock');
