@@ -1,2 +1,15 @@
-.wp-block-tpwb-second-block{background-color:red;color:#fff}
-/*# sourceMappingURL=style.css.map */
+.wp-block-tpwb-second-block {
+  background-color: #524d5b;
+  color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+}
+.wp-block-tpwb-second-block.is-style-squared {
+  border-radius: 0;
+}
+.wp-block-tpwb-second-block.is-style-outline {
+  border-radius: 0;
+  border: 2px solid currentColor;
+}
+
+/*# sourceMappingURL=style.css.map*/

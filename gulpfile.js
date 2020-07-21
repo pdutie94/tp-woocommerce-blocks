@@ -11,6 +11,7 @@ function bundle() {
         "!package.json",
         "!package-lock.json",
         "!webpack.config.js",
+        "!.idea",
         "!.gitignore"
     ])
     .pipe(zip('tp-woocommerce-blocks.zip'))

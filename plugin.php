@@ -11,8 +11,21 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
 define('TPWB_VERSION', '1.0.0');
+
+add_filter('block_categories', 'tpwb_blocks_categories', 10, 2);
+function tpwb_blocks_categories($category, $post) {
+    return array_merge(
+        $category,
+        array(
+            array(
+                'slug' => 'tp-woo-blocks',
+                'title' => __('TP Woocommerce Blocks', 'tpwv'),
+                'icon'  => 'wordpress'
+            )
+        )
+    );
+}
 
 function tpwb_blocks_register_block_type($block, $options = array()) {
     register_block_type(
@@ -33,7 +46,7 @@ function tpwb_blocks_register() {
     wp_register_script(
         'tpwb-blocks-editor',
         plugins_url('dist/editor.js', __FILE__), 
-        array('wp-blocks', 'wp-i18n', 'wp-element')
+        array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'wp-components')
     );
     wp_register_script(
         'tpwb-blocks',
