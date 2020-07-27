@@ -4,15 +4,16 @@ import { registerBlockType } from '@wordpress/blocks'
 import { __ } from '@wordpress/i18n'
 import { RichText, getColorClassName } from '@wordpress/editor'
 import classnames from 'classnames'
+import { omit } from 'lodash'
 import Edit from './edit';
 
 const attributes = {
     content: {
         type: 'string',
         source: 'html',
-        selector: 'p'
+        selector: 'h4'
     },
-    alignment: {
+    textAlignment: {
         type: 'string'
     },
     bgColor: {
@@ -26,6 +27,14 @@ const attributes = {
     },
     customTextColor: {
         type: 'string'
+    },
+    shadow: {
+        type: 'boolean',
+        default: false
+    },
+    shadowOpacity: {
+        type: 'number',
+        default: 0.3
     }
 }
 
@@ -54,23 +63,98 @@ registerBlockType('tpwb/second-block', {
     styles: styles,
     edit: Edit,
     save: function({attributes}) {
-        const { content, alignment, bgColor, textColor, customBgColor, customTextColor } = attributes;
+        const { content, textAlignment, bgColor, textColor, customBgColor, customTextColor, shadow, shadowOpacity } = attributes;
         const backgroundClass = getColorClassName('background-color', bgColor);
         const textClass = getColorClassName('color', textColor);
 
         const classes = classnames({
             [backgroundClass]: backgroundClass, 
             [textClass]: textClass, 
+            'has-shadow': shadow,
+            [`shadow-opacity-${shadowOpacity * 100}`]: shadowOpacity
         })
+
         return <RichText.Content
         className={ classes }
-        tagName="p"
+        tagName="h4"
         value={content}
         style={{
-            textAlign: alignment, 
+            textAlign: textAlignment, 
             backgroundColor: backgroundClass ? undefined : customBgColor, 
             color: textClass ? undefined : customTextColor
         }}
         />;
-    }
+    },
+    deprecated: [
+        {
+            attributes: omit({
+                ...attributes,
+                alignment: {
+                    type: 'string'
+                }
+            }, ['textAlignment']),
+            migrate: (attributes) => {
+                return omit({
+                    ...attributes,
+                    textAlignment: attributes.alignment
+                }, ['alignment'])
+            },
+            save: function({attributes}) {
+                const { content, alignment, bgColor, textColor, customBgColor, customTextColor, shadow, shadowOpacity } = attributes;
+                const backgroundClass = getColorClassName('background-color', bgColor);
+                const textClass = getColorClassName('color', textColor);
+        
+                const classes = classnames({
+                    [backgroundClass]: backgroundClass, 
+                    [textClass]: textClass, 
+                    'has-shadow': shadow,
+                    [`shadow-opacity-${shadowOpacity * 100}`]: shadowOpacity
+                })
+        
+                return <RichText.Content
+                className={ classes }
+                tagName="p"
+                value={content}
+                style={{
+                    textAlign: alignment, 
+                    backgroundColor: backgroundClass ? undefined : customBgColor, 
+                    color: textClass ? undefined : customTextColor
+                }}
+                />;
+            }
+        },
+        {
+            attributes: {
+                ...attributes,
+                content: {
+                    type: 'string',
+                    source: 'html',
+                    selector: 'p'
+                }
+            },
+            save: function({attributes}) {
+                const { content, alignment, bgColor, textColor, customBgColor, customTextColor, shadow, shadowOpacity } = attributes;
+                const backgroundClass = getColorClassName('background-color', bgColor);
+                const textClass = getColorClassName('color', textColor);
+        
+                const classes = classnames({
+                    [backgroundClass]: backgroundClass, 
+                    [textClass]: textClass, 
+                    'has-shadow': shadow,
+                    [`shadow-opacity-${shadowOpacity * 100}`]: shadowOpacity
+                })
+        
+                return <RichText.Content
+                className={ classes }
+                tagName="p"
+                value={content}
+                style={{
+                    textAlign: alignment, 
+                    backgroundColor: backgroundClass ? undefined : customBgColor, 
+                    color: textClass ? undefined : customTextColor
+                }}
+                />;
+            }
+        }
+    ]
 });

@@ -46,7 +46,7 @@ function tpwb_blocks_register() {
     wp_register_script(
         'tpwb-blocks-editor',
         plugins_url('dist/editor.js', __FILE__), 
-        array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'wp-components')
+        array('wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'wp-components', 'lodash')
     );
     wp_register_script(
         'tpwb-blocks',
